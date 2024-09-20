@@ -1198,7 +1198,6 @@ static ncclResult_t ofi_init(ncclDebugLogger_t logFunction)
 	NCCL_OFI_INFO(NCCL_INIT | NCCL_NET, "Selected Provider is %s",
 		      ofi_info_list->fabric_attr->prov_name);
 
-
 	/* Check if provider requires local memory registration */
 	if (ofi_info_list->domain_attr->mr_mode & FI_MR_LOCAL) {
 		NCCL_OFI_TRACE(NCCL_INIT | NCCL_NET, "Provider %s requires registration of local memory buffers",
