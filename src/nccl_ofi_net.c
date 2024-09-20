@@ -199,7 +199,7 @@ static inline void zero_nccl_ofi_req(nccl_ofi_req_t *req)
 	req->rComm = NULL;
 
 	req->buffer_index = 0ULL;
-	memset(&req->ctx, 0, sizeof(struct fi_context));
+	memset(&req->ctx, 0, sizeof(req->ctx));
 
 	req->dev = -1;
 	req->size = 0;
@@ -602,7 +602,7 @@ static void get_hints(struct fi_info *hints, int request_gdr)
 		hints->domain_attr->mr_mode =FI_MR_ENDPOINT;
 	}
 
-	hints->mode = FI_CONTEXT;
+	hints->mode = FI_CONTEXT | FI_CONTEXT2;
 
 	hints->ep_attr->type = FI_EP_RDM;
 
@@ -690,7 +690,6 @@ static int get_ofi_provider(char *prov_include, struct fi_info **prov_info_list)
 	rc = find_ofi_provider(&providers);
 	if (rc != 0)
 		goto error;
-
 	/*
 	 * Create an array of providers where each index represents
 	 * a info structure list for a single provider name.
@@ -1112,7 +1111,7 @@ static inline ncclResult_t nccl_ofi_progress(nccl_ofi_t *nccl_ofi_comp)
 static ncclResult_t ofi_init(ncclDebugLogger_t logFunction)
 {
 	ncclResult_t ret = ncclSuccess;
-	char *prov_include = "cxi";
+	char *prov_include = "opx";
 	int idx, rc;
 
 	ofi_log_function = logFunction;
@@ -1208,7 +1207,6 @@ static ncclResult_t ofi_init(ncclDebugLogger_t logFunction)
 		NCCL_OFI_TRACE(NCCL_INIT | NCCL_NET, "Provider %s does not require registration of local memory buffers",
 			       ofi_info_list->fabric_attr->prov_name);
 	}
-
 	/* Check if provider requires heterogeneous memory registration */
 	if (ofi_info_list->domain_attr->mr_mode & FI_MR_HMEM) {
 		NCCL_OFI_TRACE(NCCL_INIT | NCCL_NET, "Provider %s requires registration of device buffers",
