@@ -591,7 +591,7 @@ static void get_hints(struct fi_info *hints, int request_gdr)
 		 * Set MR mode bits to indicate that application allows
 		 * registration of both local and device memory buffers
 		 */
-		hints->domain_attr->mr_mode = FI_MR_ENDPOINT;
+		hints->domain_attr->mr_mode = FI_MR_ENDPOINT | FI_MR_HMEM;
 	}
 	else {
 		hints->caps = FI_TAGGED | FI_MSG | FI_REMOTE_COMM;
@@ -1170,6 +1170,7 @@ static ncclResult_t ofi_init(ncclDebugLogger_t logFunction)
 
 	/* Get list of NICs fi_info structures for a single provider */
 	ret = get_ofi_provider(prov_include, &ofi_info_list);
+
 	if (ret != 0 || ofi_info_list == NULL) {
 		ret = ncclSystemError;
 		goto exit;
